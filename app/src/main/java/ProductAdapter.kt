@@ -6,36 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dispositivosmoviles.Product
 import com.example.dispositivosmoviles.R
 
-class ProductAdapter: RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
-    val images = intArrayOf(
-        R.drawable.ic_launcher_foreground,
-        R.drawable.ic_launcher_foreground,
-        R.drawable.ic_launcher_foreground,
-        R.drawable.ic_launcher_foreground
-    )
-
-    val names = arrayOf(
-        "Producto 1",
-        "Producto 2",
-        "Producto 3",
-        "Producto 4",
-    )
-
-    val prices = arrayOf(
-        "$9.99",
-        "$14.99",
-        "$49.99",
-        "$1.99"
-    )
-
-    val quantities = arrayOf(
-        "10",
-        "4",
-        "8",
-        "6"
-    )
+class ProductAdapter(var products: Array<Product>): RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
+    val image = R.drawable.logo
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var productImage: ImageView
@@ -59,13 +34,12 @@ class ProductAdapter: RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.productImage.setImageResource(images[position])
-        viewHolder.productName.text = names[position]
-        viewHolder.productPrice.text = prices[position]
-        viewHolder.productQuantity.text = quantities[position]
-
+        viewHolder.productImage.setImageResource(image)
+        viewHolder.productName.text = products[position].name
+        viewHolder.productPrice.text = products[position].price.toString()
+        viewHolder.productQuantity.text = products[position].quantity.toString()
     }
 
-    override fun getItemCount() = names.size
+    override fun getItemCount() = products.size
 
 }

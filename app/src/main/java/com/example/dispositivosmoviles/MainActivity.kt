@@ -1,104 +1,73 @@
 package com.example.dispositivosmoviles
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.wallet.AutoResolveHelper
-import com.google.android.gms.wallet.IsReadyToPayRequest
-import com.google.android.gms.wallet.PaymentDataRequest
-import com.google.android.gms.wallet.PaymentsClient
-import com.google.android.gms.wallet.Wallet
-import com.google.android.gms.wallet.WalletConstants
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.zxing.integration.android.IntentIntegrator
 import layout.ProductAdapter
 import layout.com.example.dispositivosmoviles.CheckoutModalFragment
-import org.json.JSONArray
-import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
-//    private lateinit var paymentsClient: PaymentsClient
-//
-//    private val allowedCardNetworks = JSONArray(listOf(
-//        "AMEX",
-//        "DISCOVER",
-//        "INTERAC",
-//        "JCB",
-//        "MASTERCARD",
-//        "VISA"))
-//
-//    private val allowedCardAuthMethods = JSONArray(
-//        listOf(
-//            "PAN_ONLY",
-//            "CRYPTOGRAM_3DS"
-//        )
-//    )
-
+    lateinit var auth: FirebaseAuth
+    lateinit var db: FirebaseFirestore
     lateinit var recyclerView: RecyclerView
-    lateinit var checkoutButton: Button
+    private lateinit var checkoutButton: Button
+    lateinit var adapter: ProductAdapter
+    var total: Float = 0.0f
+    lateinit var totalCostTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        auth = Firebase.auth
+
+        if (auth.currentUser == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+
+        db = Firebase.firestore
+
+        totalCostTextView = findViewById(R.id.totalCostTextView)
+
+        initRecyclerView()
+        initCheckoutButton()
+        initScanButton()
+    }
+
+    private fun initRecyclerView() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        val adapter = ProductAdapter()
+        adapter = ProductAdapter(arrayOf())
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+    }
 
-        val checkoutModalFragment = CheckoutModalFragment()
+    private fun initCheckoutButton() {
+        val checkoutModalFragment = CheckoutModalFragment(total)
         checkoutButton = findViewById(R.id.checkoutButton)
 
         checkoutButton.setOnClickListener {
             checkoutModalFragment.show(supportFragmentManager, "CheckoutModalFragment")
         }
+    }
 
+    private fun initScanButton() {
         val scanButton = findViewById<Button>(R.id.scanButton)
-
-        scanButton.setOnClickListener { initScanner() }
-
-//        val walletOptions: Wallet.WalletOptions = Wallet.WalletOptions.Builder()
-//            .setEnvironment(WalletConstants.ENVIRONMENT_TEST)
-//            .build();
-//
-//        paymentsClient = Wallet.getPaymentsClient(this, walletOptions);
-//
-//        val readyToPayRequest: IsReadyToPayRequest =
-//            IsReadyToPayRequest.fromJson(baseConfigurationJson().toString())
-//
-//        val task: Task<Boolean> = paymentsClient.isReadyToPay(readyToPayRequest)
-//        task.addOnCompleteListener(this, OnCompleteListener {
-//            fun onComplete(completeTask: Task<Boolean>) {
-//                if (completeTask.isSuccessful) {
-//                    showGooglePayButton(completeTask.result)
-//                } else {
-//                    // Handle the error accordingly
-//                }
-//            }
-//        })
-//
-//        val paymentRequestJson: JSONObject = baseConfigurationJson();
-//        paymentRequestJson.put("transactionInfo", JSONObject()
-//            .put("totalPrice", "123.45")
-//            .put("totalPriceStatus", "FINAL")
-//            .put("currencyCode", "MXN"));
-//        paymentRequestJson.put("merchantInfo", JSONObject()
-//            .put("merchantId", "01234567890123456789")
-//            .put("merchantName", "Example Merchant"))
-//
-//        val request = PaymentDataRequest.fromJson(paymentRequestJson.toString())
-//
-//        AutoResolveHelper.resolveTask(
-//            paymentsClient.loadPaymentData(request),
-//            this, LOAD_PAYMENT_DATA_REQUEST_CODE
-//        )
+        // CAMBIAR ESTO
+        scanButton.setOnClickListener { getProduct("9300675009829") }
     }
 
     private fun initScanner() {
@@ -112,11 +81,7 @@ class MainActivity : AppCompatActivity() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents != null) {
-                Toast.makeText(
-                    this,
-                    "El valor escaneado es: ${result.contents}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                getProduct(result.contents)
             } else {
                 Toast.makeText(this, "Operación cancelada", Toast.LENGTH_SHORT).show()
             }
@@ -125,45 +90,46 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun baseConfigurationJson(): JSONObject {
-//        return JSONObject()
-//            .put("apiVersion", 2)
-//            .put("apiVersionMinor", 0)
-//            .put("allowedPaymentMethods", JSONArray().put(baseCardPaymentMethod().put("tokenizationSpecification", gatewayTokenizationSpecification())))
-//    }
-//
-//    private fun baseCardPaymentMethod(): JSONObject {
-//        return JSONObject().apply {
-//
-//            val parameters = JSONObject().apply {
-//                put("allowedAuthMethods", allowedCardAuthMethods)
-//                put("allowedCardNetworks", allowedCardNetworks)
-//                put("billingAddressRequired", true)
-//                put("billingAddressParameters", JSONObject().apply {
-//                    put("format", "FULL")
-//                })
-//            }
-//
-//            put("type", "CARD")
-//            put("parameters", parameters)
-//        }
-//    }
-//
-//    private fun gatewayTokenizationSpecification(): JSONObject {
-//        return JSONObject().apply {
-//            put("type", "PAYMENT_GATEWAY")
-//            put("parameters", JSONObject(mapOf(
-//                "gateway" to "example",
-//                "gatewayMerchantId" to "exampleGatewayMerchantId")))
-//        }
-//    }
-//
-//    private fun showGooglePayButton(userIsReadyToPay: Boolean) {
-//        if (userIsReadyToPay) {
-//            // Update your UI to show the Google Pay button
-//            // eg.: googlePayButton.setVisibility(View.VISIBLE)
-//        } else {
-//            // Google Pay is not supported. Do not show the button.
-//        }
-//    }
+    private fun getProduct(code: String) {
+        db.collection("products")
+            .document(code)
+            .get()
+            .addOnSuccessListener { result ->
+                Log.d(TAG, "FOUND")
+                Log.d(TAG, result.data.toString())
+                val product = parseHashMap(code, result.data as HashMap<*, *>)
+                addProductToList(product)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting document", exception)
+            }
+    }
+    private fun parseHashMap(code: String, data: HashMap<*, *>): Product {
+        return Product(
+            code,
+            data["name"] as String,
+            data["image"] as String,
+            data["price"] as Number,
+            quantity = 1
+        )
+    }
+
+    private fun addProductToList(product: Product) {
+        total += product.price.toFloat()
+        totalCostTextView.text = "$${total.toString()}"
+
+        var index = 0
+        for (adapterProduct in adapter.products) {
+            if (adapterProduct.code == product.code) {
+                adapterProduct.quantity++
+                adapter.notifyItemChanged(index)
+                return
+            }
+
+            index++
+        }
+
+        adapter.products += product
+        adapter.notifyItemInserted(adapter.products.size - 1)
+    }
 }

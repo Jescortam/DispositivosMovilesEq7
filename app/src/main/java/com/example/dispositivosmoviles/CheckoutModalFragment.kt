@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.example.dispositivosmoviles.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class CheckoutModalFragment: BottomSheetDialogFragment() {
+class CheckoutModalFragment(total: Float): BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

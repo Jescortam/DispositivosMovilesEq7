@@ -3,20 +3,21 @@
     <string name="realizar_el_pago">Realizar el pago</string>
     <string name="carrito">Carrito</string>
     <string name="total">Total</string>
-    <string name="costo_ejemplo">$50.00</string>
+    <string name="costo_ejemplo">$0.00</string>
     <string name="escanear_productos">Escanear productos</string>
     <string name="producto_ejemplo">Pepsi 500ml</string>
     <string name="precio_ejemplo">$9.99</string>
     <string name="cantidad_ejemplo">5</string>
     <string name="cantidad_label">Cantidad</string>
+    <string name="companyNamePlaceholder">Sistema de Autocobro</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="login">Acceder</string>
+    <string name="aun_no_estas_registrado">Aún no estás registrado?</string>
+    <string name="crea_una_cuenta">Crea una cuenta</string>
+    <string name="signup">crear cuenta</string>
+    <string name="ya_estas_registrado">Ya estás registrado?</string>
+    <string name="accede_a_tu_cuenta">Accede a tu cuenta</string>
 
     <!-- Checkout activity -->
-    <string name="title_activity_checkout">CheckoutActivity</string>
-    <string name="checkout_item_description">Description</string>
-    <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is
-        not available on this phone.
-    </string>
-    <string name="payments_show_name" translatable="false">Successfully received payment data for
-        %s!
-    </string>
 </resources>
