@@ -56,10 +56,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initCheckoutButton() {
-        val checkoutModalFragment = CheckoutModalFragment(total)
+        val checkoutModalFragment = CheckoutModalFragment()
         checkoutButton = findViewById(R.id.checkoutButton)
 
         checkoutButton.setOnClickListener {
+            checkoutModalFragment.total = total
             checkoutModalFragment.show(supportFragmentManager, "CheckoutModalFragment")
         }
     }
