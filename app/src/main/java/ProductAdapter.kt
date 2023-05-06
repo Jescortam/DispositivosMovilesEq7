@@ -6,11 +6,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.example.dispositivosmoviles.Product
 import com.example.dispositivosmoviles.R
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class ProductAdapter(var products: Array<Product>): RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
-    val image = R.drawable.logo
+    private lateinit var glideRef: RequestManager
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var productImage: ImageView
@@ -30,11 +34,18 @@ class ProductAdapter(var products: Array<Product>): RecyclerView.Adapter<Product
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.product_layout, viewGroup, false)
 
+        glideRef = Glide.with(view)
+
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.productImage.setImageResource(image)
+        val storageRef = Firebase.storage.reference
+
+        storageRef.child(products[position].image).downloadUrl.addOnSuccessListener { uri ->
+            glideRef.load(uri).into(viewHolder.productImage)
+        }
+
         viewHolder.productName.text = products[position].name
         viewHolder.productPrice.text = products[position].price.toString()
         viewHolder.productQuantity.text = products[position].quantity.toString()

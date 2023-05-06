@@ -18,6 +18,9 @@
     <string name="signup">crear cuenta</string>
     <string name="ya_estas_registrado">Ya estás registrado?</string>
     <string name="accede_a_tu_cuenta">Accede a tu cuenta</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logo_de_la_empresa">Logo de la empresa</string>
 
     <!-- Checkout activity -->
 </resources>

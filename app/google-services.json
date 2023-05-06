@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "784700925399",
+    "project_id": "dispositivosmoviles-fbf55",
+    "storage_bucket": "dispositivosmoviles-fbf55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784700925399:android:5dee0b00dc93476979d792",
+        "android_client_info": {
+          "package_name": "com.example.dispositivosmoviles"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784700925399-mgoe0e6bntbo8hg08uv9bmio7ib5fqo2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWQhlf21Yf7YcilZ9tm2WFEP3xoDN28ls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784700925399-mgoe0e6bntbo8hg08uv9bmio7ib5fqo2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

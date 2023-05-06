@@ -1,16 +1,22 @@
 package com.example.dispositivosmoviles
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class LoginActivity : AppCompatActivity() {
+class LoginFragment : Fragment() {
+    private lateinit var root: ViewGroup
+
     private lateinit var buttonCreateAccount: Button
     private lateinit var buttonLogin: Button
     private lateinit var editTextEmail: EditText
@@ -19,22 +25,23 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
         auth = Firebase.auth
-
-        initForm()
-
-        buttonCreateAccount = findViewById(R.id.buttonCreateAccount)
-        buttonCreateAccount.setOnClickListener { goToSignup() }
     }
 
-    private fun initForm() {
-        editTextEmail = findViewById(R.id.editTextEmail)
-        editTextPassword = findViewById(R.id.editTextPassword)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        root = inflater.inflate(R.layout.fragment_login, container, false) as ViewGroup
 
-        buttonLogin = findViewById(R.id.buttonLogin)
+        editTextEmail = root.findViewById(R.id.editTextEmail)
+        editTextPassword = root.findViewById(R.id.editTextPassword)
+
+        buttonLogin = root.findViewById(R.id.buttonLogin)
         buttonLogin.setOnClickListener { login() }
+
+        return root
     }
 
     private fun login() {
@@ -44,16 +51,16 @@ class LoginActivity : AppCompatActivity() {
                 editTextPassword.text.toString()
             ).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+                    goToShoppingCart()
                 } else {
-                    Toast.makeText(this, "Error: Intente nuevamente", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Error: Intente nuevamente", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    private fun goToSignup() {
-        startActivity(Intent(this, SignupActivity::class.java))
+    private fun goToShoppingCart() {
+        val action = LoginFragmentDirections.actionLoginFragmentToShoppingCartFragment()
+        root.findNavController().navigate(action)
     }
 }
