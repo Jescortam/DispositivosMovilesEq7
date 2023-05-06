@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +26,7 @@ class ShoppingCartFragment : Fragment() {
     lateinit var auth: FirebaseAuth
     lateinit var db: FirebaseFirestore
     lateinit var recyclerView: RecyclerView
+    private lateinit var logoutButton: ImageView
     private lateinit var checkoutButton: Button
     lateinit var adapter: ProductAdapter
     var total: Float = 0.0f
@@ -37,10 +36,6 @@ class ShoppingCartFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         auth = Firebase.auth
-        if (auth.currentUser == null) {
-            goToLogin()
-        }
-
         db = Firebase.firestore
     }
 
@@ -56,7 +51,18 @@ class ShoppingCartFragment : Fragment() {
         initCheckoutButton(root)
         initScanButton(root)
 
+        logoutButton = root.findViewById(R.id.logoutButton)
+        logoutButton.setOnClickListener { logout() }
+
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (auth.currentUser == null) {
+            goToLogin()
+        }
     }
 
     private fun initRecyclerView(root: ViewGroup) {
@@ -149,5 +155,11 @@ class ShoppingCartFragment : Fragment() {
     private fun goToLogin() {
         val action = ShoppingCartFragmentDirections.actionShoppingCartFragmentToLoginFragment()
         root.findNavController().navigate(action)
+    }
+
+    private fun logout() {
+        Firebase.auth.signOut()
+
+        goToLogin()
     }
 }

@@ -41,6 +41,9 @@ class LoginFragment : Fragment() {
         buttonLogin = root.findViewById(R.id.buttonLogin)
         buttonLogin.setOnClickListener { login() }
 
+        buttonCreateAccount = root.findViewById(R.id.buttonCreateAccount)
+        buttonCreateAccount.setOnClickListener { goToCreateAccount() }
+
         return root
     }
 
@@ -61,6 +64,11 @@ class LoginFragment : Fragment() {
 
     private fun goToShoppingCart() {
         val action = LoginFragmentDirections.actionLoginFragmentToShoppingCartFragment()
+        root.findNavController().navigate(action)
+    }
+
+    private fun goToCreateAccount() {
+        val action = LoginFragmentDirections.actionLoginFragmentToSignupFragment()
         root.findNavController().navigate(action)
     }
 }

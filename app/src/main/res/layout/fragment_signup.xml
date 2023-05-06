@@ -111,18 +111,21 @@
 
         <View
             android:id="@+id/divider"
-            android:layout_below="@id/formLayout"
+            android:layout_above="@id/loginLayout"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             android:background="?android:attr/listDivider" />
 
         <RelativeLayout
+            android:id="@+id/loginLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/formLayout"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="31dp">
+            android:layout_marginTop="30dp"
+
+            android:layout_marginBottom="20dp">
 
             <TextView
                 android:id="@+id/crearTextView"
@@ -134,7 +137,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/buttonCreateAccount"
+                android:id="@+id/buttonLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/crearTextView"
