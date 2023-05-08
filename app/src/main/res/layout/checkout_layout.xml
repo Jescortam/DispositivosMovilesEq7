@@ -10,7 +10,8 @@
         android:layout_height="wrap_content" />
 
     <include
-        layout="@layout/buy_with_googlepay_button"
+        layout="@layout/pay_with_googlepay_button"
+        android:id="@+id/googlePayButton"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/totalLayout"

@@ -1,6 +1,7 @@
 package com.example.dispositivosmoviles
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -25,18 +28,21 @@ class ShoppingCartFragment : Fragment() {
     private lateinit var root: ViewGroup
     lateinit var auth: FirebaseAuth
     lateinit var db: FirebaseFirestore
+    private lateinit var adminRef: DatabaseReference
+    private lateinit var adminName: String
+    private var adminStatus: Boolean = false
     lateinit var recyclerView: RecyclerView
     private lateinit var logoutButton: ImageView
     private lateinit var checkoutButton: Button
     lateinit var adapter: ProductAdapter
     var total: Float = 0.0f
     lateinit var totalCostTextView: TextView
+    lateinit var adminNameTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         auth = Firebase.auth
-        db = Firebase.firestore
     }
 
     override fun onCreateView(
@@ -54,6 +60,8 @@ class ShoppingCartFragment : Fragment() {
         logoutButton = root.findViewById(R.id.logoutButton)
         logoutButton.setOnClickListener { logout() }
 
+        adminNameTextView = root.findViewById(R.id.adminNameTextView)
+
         return root
     }
 
@@ -62,7 +70,41 @@ class ShoppingCartFragment : Fragment() {
 
         if (auth.currentUser == null) {
             goToLogin()
+            return
         }
+
+        databaseSetup()
+    }
+
+    private fun databaseSetup() {
+        val database = Firebase.database.getReference("/administrators")
+        adminRef = database.child("caQlil8sP2Xzb51P8AhBwGeHKBj1")
+
+        val adminListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val data = dataSnapshot.value as HashMap<*, *>
+                adminStatus = data["isActive"] as Boolean
+                updateCheckoutButtonStatus()
+
+                adminName = data["name"] as String
+                updateAdminName()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+            }
+        }
+
+        adminRef.addValueEventListener(adminListener)
+
+    }
+
+    private fun updateCheckoutButtonStatus() {
+        checkoutButton.isEnabled = adminStatus
+        checkoutButton.isClickable = adminStatus
+    }
+    private fun updateAdminName() {
+        adminNameTextView.text = if (adminStatus && adminName.isNotEmpty()) adminName else "Admin desconectado"
     }
 
     private fun initRecyclerView(root: ViewGroup) {
@@ -114,13 +156,13 @@ class ShoppingCartFragment : Fragment() {
             .document(code)
             .get()
             .addOnSuccessListener { result ->
-                Log.d(ContentValues.TAG, "FOUND")
-                Log.d(ContentValues.TAG, result.data.toString())
+                Log.d(TAG, "FOUND")
+                Log.d(TAG, result.data.toString())
                 val product = parseHashMap(code, result.data as HashMap<*, *>)
                 addProductToList(product)
             }
             .addOnFailureListener { exception ->
-                Log.w(ContentValues.TAG, "Error getting document", exception)
+                Log.w(TAG, "Error getting document", exception)
             }
     }
     private fun parseHashMap(code: String, data: HashMap<*, *>): Product {
@@ -152,14 +194,19 @@ class ShoppingCartFragment : Fragment() {
         adapter.notifyItemInserted(adapter.products.size - 1)
     }
 
+    private fun logout() {
+        Firebase.auth.signOut()
+
+        goToLogin()
+    }
+
     private fun goToLogin() {
         val action = ShoppingCartFragmentDirections.actionShoppingCartFragmentToLoginFragment()
         root.findNavController().navigate(action)
     }
 
-    private fun logout() {
-        Firebase.auth.signOut()
-
-        goToLogin()
+    private fun goToAdmin(adminName: String) {
+        val action = ShoppingCartFragmentDirections.actionShoppingCartFragmentToAdminFragment(adminName)
+        root.findNavController().navigate(action)
     }
 }

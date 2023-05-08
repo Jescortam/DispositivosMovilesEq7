@@ -75,18 +75,34 @@
             layout="@layout/total_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/checkoutButton" />
+            android:layout_above="@+id/checkoutLayout" />
 
-        <Button
-            android:id="@+id/checkoutButton"
+        <RelativeLayout
+            android:id="@+id/checkoutLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_marginVertical="20dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:text="@string/realizar_el_pago"
-            android:textSize="15sp" />
+            android:layout_alignParentBottom="true" >
+
+            <Button
+                android:id="@+id/checkoutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/realizar_el_pago"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/adminNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/checkoutButton"
+                android:layout_centerHorizontal="true"
+                android:text="@string/administrador_desconectado"
+                android:textColor="@color/black"
+                android:textSize="20sp"/>
+        </RelativeLayout>
 
     </RelativeLayout>
 

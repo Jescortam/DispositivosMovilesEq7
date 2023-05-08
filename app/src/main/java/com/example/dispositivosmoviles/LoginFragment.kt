@@ -1,7 +1,8 @@
 package com.example.dispositivosmoviles
 
-import android.content.Intent
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,10 @@ import android.widget.Toast
 import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import layout.com.example.dispositivosmoviles.Administrator
 
 class LoginFragment : Fragment() {
     private lateinit var root: ViewGroup
@@ -52,14 +56,41 @@ class LoginFragment : Fragment() {
             auth.signInWithEmailAndPassword(
                 editTextEmail.text.toString(),
                 editTextPassword.text.toString()
-            ).addOnCompleteListener {
+            ).addOnCompleteListener { it ->
                 if (it.isSuccessful) {
-                    goToShoppingCart()
+//                    val db = Firebase.firestore
+//                    val adminRef = db.collection("administrators").document(auth.currentUser!!.uid)
+//                    adminRef.get()
+//                        .addOnSuccessListener { document ->
+
+//                        }
+//                        .addOnFailureListener { goToShoppingCart() }
+
+                    val admin = Firebase.database.getReference("/administrators").child(auth.currentUser!!.uid).get()
+                    admin
+                        .addOnSuccessListener { data ->
+                            if (data.value != null) {
+                                val value = data.value as HashMap<*, *>
+                                val adminName = value["name"] as String
+                                goToAdmin(adminName)
+                            } else {
+                                goToShoppingCart()
+                            }
+                        }
+                        .addOnFailureListener{
+                            goToShoppingCart()
+                        }
+
                 } else {
                     Toast.makeText(activity, "Error: Intente nuevamente", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+    }
+
+    private fun goToAdmin(adminName: String) {
+        val action = LoginFragmentDirections.actionLoginFragmentToAdminFragment(adminName)
+        root.findNavController().navigate(action)
     }
 
     private fun goToShoppingCart() {
