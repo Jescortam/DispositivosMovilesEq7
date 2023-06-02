@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AddCreditCardFragment">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/formLayout"
+                android:layout_marginTop="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textViewIniciaSesion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    android:layout_marginBottom="20dp"
+                    android:textStyle="bold"
+                    android:text="@string/agrega_una_nueva_tarjeta"/>
+
+                <RelativeLayout
+                    android:id="@+id/numberLayout"
+                    android:layout_below="@id/textViewIniciaSesion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/textViewNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textColor="#000000"
+                        android:text="@string/numero_de_tarjeta" />
+
+                    <EditText
+                        android:id="@+id/editTextNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textViewNumber"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentEnd="true"
+                        android:autofillHints="true"
+                        android:ems="10"
+                        android:hint="@string/placeholder_credit_card_number"
+                        android:inputType="number"
+                        android:maxLength="16"
+                        android:textSize="20sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/nameLayout"
+                    android:layout_below="@id/numberLayout"
+                    android:layout_marginTop="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/textViewName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:text="@string/nombre_del_titular" />
+
+                    <EditText
+                        android:id="@+id/editTextName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textViewName"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentEnd="true"
+                        android:autofillHints="true"
+                        android:ems="10"
+                        android:hint="@string/nombre_del_titular"
+                        android:inputType="text"
+                        android:textSize="20sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/expirationDateLayout"
+                    android:layout_below="@id/nameLayout"
+                    android:layout_marginTop="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/textViewExpirationDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:text="@string/fecha_de_caducidad" />
+
+                    <EditText
+                        android:id="@+id/editTextExpirationMonth"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textViewExpirationDate"
+                        android:layout_alignParentStart="true"
+                        android:autofillHints="true"
+                        android:ems="10"
+                        android:hint="@string/MM"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/divider"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textViewExpirationDate"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp"
+                        android:textSize="25sp"
+                        android:maxLength="2"
+                        android:text="@string/divider"
+                        android:layout_toEndOf="@id/editTextExpirationMonth"/>
+
+                    <EditText
+                        android:id="@+id/editTextExpirationYear"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textViewExpirationDate"
+                        android:layout_toEndOf="@id/divider"
+                        android:autofillHints="true"
+                        android:ems="10"
+                        android:hint="@string/AA"
+                        android:maxLength="2"
+                        android:inputType="number"
+                        android:textSize="20sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/typeLayout"
+                    android:layout_below="@id/expirationDateLayout"
+                    android:layout_marginTop="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/textViewType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:text="@string/tipo_de_tarjeta" />
+
+                    <RadioGroup
+                        android:layout_below="@id/textViewType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <RadioButton android:id="@+id/radioButtonVisa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/visa"/>
+                        <RadioButton
+                            android:id="@+id/radioButtonMasterCard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/masterCard" />
+                    </RadioGroup>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_below="@id/typeLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp">
+
+                    <Button
+                        android:id="@+id/buttonGoBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/purple_200"
+                        android:text="@string/regresar"
+                        app:cornerRadius="20dp"/>
+
+                    <Button
+                        android:id="@+id/buttonAdd"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="@string/a_adir_tarjeta"
+                        app:cornerRadius="20dp" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+</FrameLayout>

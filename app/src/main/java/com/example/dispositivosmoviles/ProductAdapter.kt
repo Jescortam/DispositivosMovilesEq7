@@ -1,4 +1,4 @@
-package layout
+package layout.com.example.dispositivosmoviles
 
 import android.view.LayoutInflater
 import android.view.View

@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_shoppingCartFragment_to_adminFragment"
             app:destination="@id/adminFragment" />
+        <action
+            android:id="@+id/action_shoppingCartFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
@@ -52,8 +55,31 @@
         <action
             android:id="@+id/action_adminFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addCreditCardFragment"
+        android:name="com.example.dispositivosmoviles.AddCreditCardFragment"
+        android:label="fragment_add_credit_card"
+        tools:layout="@layout/fragment_add_credit_card" >
+        <action
+            android:id="@+id/action_addCreditCardFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
         <argument
-            android:name="adminName"
+            android:name="parsedTicket"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.example.dispositivosmoviles.CheckoutFragment"
+        android:label="CheckoutFragment" >
+        <action
+            android:id="@+id/action_checkoutFragment_to_addCreditCardFragment"
+            app:destination="@id/addCreditCardFragment" />
+        <argument
+            android:name="parsedTicket"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_checkoutFragment_to_shoppingCartFragment"
+            app:destination="@id/shoppingCartFragment" />
     </fragment>
 </navigation>

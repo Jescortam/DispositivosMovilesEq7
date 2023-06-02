@@ -58,21 +58,11 @@ class LoginFragment : Fragment() {
                 editTextPassword.text.toString()
             ).addOnCompleteListener { it ->
                 if (it.isSuccessful) {
-//                    val db = Firebase.firestore
-//                    val adminRef = db.collection("administrators").document(auth.currentUser!!.uid)
-//                    adminRef.get()
-//                        .addOnSuccessListener { document ->
-
-//                        }
-//                        .addOnFailureListener { goToShoppingCart() }
-
                     val admin = Firebase.database.getReference("/administrators").child(auth.currentUser!!.uid).get()
                     admin
                         .addOnSuccessListener { data ->
                             if (data.value != null) {
-                                val value = data.value as HashMap<*, *>
-                                val adminName = value["name"] as String
-                                goToAdmin(adminName)
+                                goToAdmin()
                             } else {
                                 goToShoppingCart()
                             }
@@ -80,7 +70,6 @@ class LoginFragment : Fragment() {
                         .addOnFailureListener{
                             goToShoppingCart()
                         }
-
                 } else {
                     Toast.makeText(activity, "Error: Intente nuevamente", Toast.LENGTH_SHORT).show()
                 }
@@ -88,8 +77,8 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun goToAdmin(adminName: String) {
-        val action = LoginFragmentDirections.actionLoginFragmentToAdminFragment(adminName)
+    private fun goToAdmin() {
+        val action = LoginFragmentDirections.actionLoginFragmentToAdminFragment()
         root.findNavController().navigate(action)
     }
 

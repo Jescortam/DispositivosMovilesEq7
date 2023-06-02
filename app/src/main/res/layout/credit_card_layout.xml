@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/creditCardView"
+    android:layout_margin="10dp"
+    card_view:cardCornerRadius="20dp"
+    card_view:contentPadding="5dp">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        >
+
+        <TextView
+            android:id="@+id/creditCardNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/placeholder_credit_card_number"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/creditCardNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/creditCardNumberTextView"
+            android:layout_marginTop="5dp"
+            android:text="@string/placeholder_name"
+            android:textColor="#555555"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/creditCardExpirationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_expiration_date"
+            android:layout_toEndOf="@+id/creditCardNameTextView"
+            android:layout_below="@+id/creditCardNumberTextView"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="20dp"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/creditCardTypeTextView"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/creditCardNameTextView"
+            android:layout_marginVertical="10dp"
+            android:text="@string/visa"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

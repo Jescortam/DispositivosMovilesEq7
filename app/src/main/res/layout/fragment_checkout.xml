@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include
+                android:id="@+id/totalLayout"
+                layout="@layout/total_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:layout_below="@id/totalLayout"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/textViewMetodosDePago"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/escoja_el_metodo_de_pago"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/creditCardRecyclerView"
+                    android:layout_below="@+id/textViewMetodosDePago"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@id/buttonsLayout"
+                    android:layout_marginTop="20dp"/>
+
+                <RelativeLayout
+                    android:id="@+id/buttonsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_alignParentBottom="true">
+
+                    <Button
+                        android:id="@+id/buttonGoBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:backgroundTint="@color/purple_200"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/regresar"
+                        app:cornerRadius="20dp"/>
+
+                    <Button
+                        android:id="@+id/buttonAddSampleCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:textSize="12sp"
+                        android:text="@string/agregar_metodo_de_prueba"
+                        app:cornerRadius="20dp" />
+
+                    <Button
+                        android:id="@+id/buttonAddCreditCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/buttonAddSampleCard"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:text="@string/agregar_nuevo_m_todo"
+                        app:cornerRadius="20dp"/>
+                </RelativeLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </FrameLayout>

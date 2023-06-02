@@ -28,6 +28,31 @@
     <string name="cargando">Cargando...</string>
     <string name="logout">Logout</string>
     <string name="administrador_desconectado">Administrador desconectado</string>
+    <string name="inicia_sesi_n">Inicia sesión</string>
+    <string name="registrate">Regístrate</string>
+    <string name="m_todos_de_pago">Métodos de pago</string>
+    <string name="placeholder_credit_card_number">XXXX-XXXX-XXXX-XXXX</string>
+    <string name="visa">VISA</string>
+    <string name="placeholder_name">John Doe</string>
+    <string name="agregar_nuevo_m_todo">Agregar nuevo método</string>
+    <string name="elige_el_metodo_de_pago">Elija el metodo de pago</string>
+    <string name="escoja_el_metodo_de_pago">Escoja el método de pago</string>
+    <string name="regresar">Regresar</string>
+    <string name="agrega_una_nueva_tarjeta">Agrega una nueva tarjeta</string>
+    <string name="numero_de_tarjeta">Número de tarjeta</string>
+    <string name="placeholder_expiration_date">XX/XX</string>
+    <string name="nombre_del_titular">Nombre del titular</string>
+    <string name="fecha_de_caducidad">Fecha de caducidad</string>
+    <string name="XX">XX</string>
+    <string name="MM">MM</string>
+    <string name="AAAA">AAAA</string>
+    <string name="divider">/</string>
+    <string name="tipo_de_tarjeta">Tipo de tarjeta</string>
+    <string name="masterCard">MasterCard</string>
+    <string name="a_adir">Añadir</string>
+    <string name="a_adir_tarjeta">Añadir tarjeta</string>
+    <string name="agregar_metodo_de_prueba">Agregar método de prueba</string>
+    <string name="AA">AA</string>
 
     <!-- Checkout activity -->
 </resources>

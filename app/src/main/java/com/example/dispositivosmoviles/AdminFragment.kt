@@ -21,24 +21,23 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-private const val ADMIN_NAME = "adminName"
 
 class AdminFragment : Fragment() {
     private lateinit var root: ViewGroup
     lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
     private lateinit var adminRef: DatabaseReference
     private var adminStatus: Boolean = false
     private lateinit var adminName: String
     private lateinit var logoutButton: ImageView
     private lateinit var activarCuentaButton: Button
     private lateinit var adminStatusTextView: TextView
+    private lateinit var adminNameTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            adminName = it.getString(ADMIN_NAME).toString()
-        }
 
+        database = Firebase.database.reference
         auth = Firebase.auth
     }
 
@@ -50,8 +49,7 @@ class AdminFragment : Fragment() {
 
         adminStatusTextView = root.findViewById(R.id.adminStatusTextView)
 
-        val adminNameTextView: TextView = root.findViewById(R.id.adminNameTextView)
-        adminNameTextView.text = adminName
+        adminNameTextView = root.findViewById(R.id.adminNameTextView)
 
         activarCuentaButton = root.findViewById(R.id.activarCuentaButton)
         activarCuentaButton.setOnClickListener { toggleActiveStatus() }
@@ -66,33 +64,25 @@ class AdminFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val database = Firebase.database.getReference("/administrators")
-        adminRef = database.child(auth.currentUser!!.uid)
+        val adminDatabase = database.child("/administrators")
+        adminRef = adminDatabase.child(auth.currentUser!!.uid)
         adminRef
             .get()
             .addOnSuccessListener {
                 val data = it.value as HashMap<*, *>
                 adminStatus = data["isActive"] as Boolean
+                adminName = data["name"] as String
+                adminNameTextView.text = adminName
                 updateAdminStatusInLayout()
             }
     }
 
     private fun toggleActiveStatus() {
         adminStatus = !adminStatus
-        val childUpdates = hashMapOf<String, Any>(
-            "isActive" to adminStatus
-        )
 
-        adminRef.updateChildren(childUpdates)
-        updateAdminStatusInLayout()
-
-//        adminRef
-//            .update("isActive", !adminStatus)
-//            .addOnSuccessListener {
-//                adminStatus = !adminStatus
-//                updateAdminStatusInLayout()
-//            }
-//            .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+        adminRef.child("isActive").setValue(adminStatus).addOnSuccessListener {
+            updateAdminStatusInLayout()
+        }
     }
 
     private fun updateAdminStatusInLayout() {

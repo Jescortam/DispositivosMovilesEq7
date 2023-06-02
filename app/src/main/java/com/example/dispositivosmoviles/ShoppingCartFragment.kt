@@ -1,6 +1,5 @@
 package com.example.dispositivosmoviles
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -20,9 +19,10 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import com.google.zxing.integration.android.IntentIntegrator
-import layout.ProductAdapter
-import layout.com.example.dispositivosmoviles.CheckoutModalFragment
+import layout.com.example.dispositivosmoviles.ProductAdapter
+import layout.com.example.dispositivosmoviles.Constants
 
 class ShoppingCartFragment : Fragment() {
     private lateinit var root: ViewGroup
@@ -43,6 +43,7 @@ class ShoppingCartFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         auth = Firebase.auth
+        db = Firebase.firestore
     }
 
     override fun onCreateView(
@@ -54,8 +55,10 @@ class ShoppingCartFragment : Fragment() {
         totalCostTextView = root.findViewById(R.id.totalCostTextView)
 
         initRecyclerView(root)
-        initCheckoutButton(root)
         initScanButton(root)
+
+        checkoutButton = root.findViewById(R.id.checkoutButton)
+        checkoutButton.setOnClickListener { goToCheckout(makeTicket()) }
 
         logoutButton = root.findViewById(R.id.logoutButton)
         logoutButton.setOnClickListener { logout() }
@@ -71,6 +74,9 @@ class ShoppingCartFragment : Fragment() {
         if (auth.currentUser == null) {
             goToLogin()
             return
+        } else if (auth.currentUser!!.uid == Constants.ADMIN_KEY) {
+            goToAdmin()
+            return
         }
 
         databaseSetup()
@@ -78,7 +84,7 @@ class ShoppingCartFragment : Fragment() {
 
     private fun databaseSetup() {
         val database = Firebase.database.getReference("/administrators")
-        adminRef = database.child("caQlil8sP2Xzb51P8AhBwGeHKBj1")
+        adminRef = database.child(Constants.ADMIN_KEY)
 
         val adminListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -96,7 +102,6 @@ class ShoppingCartFragment : Fragment() {
         }
 
         adminRef.addValueEventListener(adminListener)
-
     }
 
     private fun updateCheckoutButtonStatus() {
@@ -104,25 +109,16 @@ class ShoppingCartFragment : Fragment() {
         checkoutButton.isClickable = adminStatus
     }
     private fun updateAdminName() {
-        adminNameTextView.text = if (adminStatus && adminName.isNotEmpty()) adminName else "Admin desconectado"
+        adminNameTextView.text = if (adminStatus && adminName.isNotEmpty()) "Administrador: ${adminName}" else "Admin desconectado"
     }
 
     private fun initRecyclerView(root: ViewGroup) {
         val recyclerView = root.findViewById<RecyclerView>(R.id.recyclerView)
         adapter = ProductAdapter(arrayOf())
 
+
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
-    }
-
-    private fun initCheckoutButton(root: ViewGroup) {
-        val checkoutModalFragment = CheckoutModalFragment()
-        checkoutButton = root.findViewById(R.id.checkoutButton)
-
-        checkoutButton.setOnClickListener {
-            checkoutModalFragment.total = total
-            checkoutModalFragment.show(requireActivity().supportFragmentManager, "CheckoutModalFragment")
-        }
     }
 
     private fun initScanButton(root: ViewGroup) {
@@ -194,10 +190,23 @@ class ShoppingCartFragment : Fragment() {
         adapter.notifyItemInserted(adapter.products.size - 1)
     }
 
+    private fun makeTicket(): String? {
+        val gson = Gson()
+        return gson.toJson(adapter.products)
+    }
+
     private fun logout() {
         Firebase.auth.signOut()
-
         goToLogin()
+    }
+
+    private fun goToCheckout(ticket: String?) {
+        if (ticket == null || adapter.products.isEmpty()) {
+            return
+        }
+
+        val action = ShoppingCartFragmentDirections.actionShoppingCartFragmentToCheckoutFragment(ticket)
+        root.findNavController().navigate(action)
     }
 
     private fun goToLogin() {
@@ -205,8 +214,8 @@ class ShoppingCartFragment : Fragment() {
         root.findNavController().navigate(action)
     }
 
-    private fun goToAdmin(adminName: String) {
-        val action = ShoppingCartFragmentDirections.actionShoppingCartFragmentToAdminFragment(adminName)
+    private fun goToAdmin() {
+        val action = ShoppingCartFragmentDirections.actionShoppingCartFragmentToAdminFragment()
         root.findNavController().navigate(action)
     }
 }

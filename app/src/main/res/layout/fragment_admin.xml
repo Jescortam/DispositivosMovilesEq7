@@ -46,10 +46,10 @@
             android:layout_below="@+id/appBar">
 
             <RelativeLayout
+                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true">
+                android:layout_centerHorizontal="true">
 
                 <TextView
                     android:id="@+id/adminStatusTextView"
@@ -58,7 +58,8 @@
                     android:text="@string/cargando"
                     android:textColor="@color/black"
                     android:layout_centerHorizontal="true"
-                    android:textSize="40sp"/>
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
 
                 <Button
                     android:id="@+id/activarCuentaButton"
@@ -68,7 +69,7 @@
                     android:backgroundTint="@color/teal_700"
                     android:layout_below="@id/adminStatusTextView"
                     android:text="@string/activar_cuenta"
-                    android:textSize="40sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/adminNameTextView"
@@ -78,7 +79,7 @@
                     android:textColor="@color/black"
                     android:layout_below="@+id/activarCuentaButton"
                     android:layout_centerHorizontal="true"
-                    android:textSize="40sp"/>
+                    android:textSize="20sp"/>
             </RelativeLayout>
 
         </RelativeLayout>
