@@ -1,5 +1,6 @@
 package layout.com.example.dispositivosmoviles
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,9 @@ import com.example.dispositivosmoviles.Product
 import com.example.dispositivosmoviles.R
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlin.math.roundToInt
 
-class ProductAdapter(var products: Array<Product>): RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
+class ProductAdapter(var products: List<Product>): RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     private lateinit var glideRef: RequestManager
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -39,16 +41,27 @@ class ProductAdapter(var products: Array<Product>): RecyclerView.Adapter<Product
         return ViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val storageRef = Firebase.storage.reference
 
-        storageRef.child(products[position].image).downloadUrl.addOnSuccessListener { uri ->
-            glideRef.load(uri).into(viewHolder.productImage)
+        if (products[position].image != null) {
+            storageRef.child(products[position].image!!).downloadUrl.addOnSuccessListener { uri ->
+                glideRef.load(uri).into(viewHolder.productImage)
+            }
+        } else if (products[position].imageDrawable != null) {
+            viewHolder.productImage.setImageResource(products[position].imageDrawable!!)
+        }
+
+        val quantity = products[position].quantity
+        if (quantity % 1.0 == 0.0) {
+            viewHolder.productQuantity.text = "${quantity.roundToInt()}"
+        } else {
+            viewHolder.productQuantity.text = "$quantity"
         }
 
         viewHolder.productName.text = products[position].name
-        viewHolder.productPrice.text = products[position].price.toString()
-        viewHolder.productQuantity.text = products[position].quantity.toString()
+        viewHolder.productPrice.text = "$${products[position].price}"
     }
 
     override fun getItemCount() = products.size

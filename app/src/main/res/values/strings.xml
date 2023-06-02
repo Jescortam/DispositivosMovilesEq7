@@ -5,6 +5,7 @@
     <string name="total">Total</string>
     <string name="costo_ejemplo">$0.00</string>
     <string name="escanear_productos">Escanear productos</string>
+    <string name="pesar_productos">Pesar productos</string>
     <string name="producto_ejemplo">Pepsi 500ml</string>
     <string name="precio_ejemplo">$9.99</string>
     <string name="cantidad_ejemplo">5</string>
@@ -53,6 +54,24 @@
     <string name="a_adir_tarjeta">Añadir tarjeta</string>
     <string name="agregar_metodo_de_prueba">Agregar método de prueba</string>
     <string name="AA">AA</string>
+    <string name="CVC">CVC</string>
+    <string name="desactivar">DESACTIVAR</string>
+    <string name="dispositivos_bt">DISPOSITIVOS BT</string>
+    <string name="dispositivos">dispositivos</string>
+    <string name="conectar">CONECTAR</string>
+    <string name="luz_1">LUZ 1</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+    <string name="luz_2">LUZ 2</string>
+    <string name="texto_a_enviar">TEXTO A ENVIAR</string>
+    <string name="texto_a_enviar_min">Texto a Enviar</string>
+    <string name="enviar_texto">ENVIAR TEXTO</string>
+    <string name="buscar_dispositivos">Buscar dispositivos</string>
+    <string name="peso_gramos">Peso (gramos)</string>
+    <string name="inserte_la_cantidad_del_producto_en_gramos">Inserte la cantidad del producto en gramos</string>
+    <string name="usar_bluetooth">Usar bluetooth</string>
+    <string name="a_adir_producto">Añadir producto</string>
+    <string name="a_ada_una_fruta_o_verdura">Añada una fruta o verdura</string>
 
     <!-- Checkout activity -->
 </resources>

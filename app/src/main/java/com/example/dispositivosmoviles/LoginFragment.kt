@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         root = inflater.inflate(R.layout.fragment_login, container, false) as ViewGroup
 
         editTextEmail = root.findViewById(R.id.editTextEmail)
@@ -83,7 +83,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun goToShoppingCart() {
-        val action = LoginFragmentDirections.actionLoginFragmentToShoppingCartFragment()
+        val action = LoginFragmentDirections.actionLoginFragmentToShoppingCartFragment(null, false)
         root.findNavController().navigate(action)
     }
 

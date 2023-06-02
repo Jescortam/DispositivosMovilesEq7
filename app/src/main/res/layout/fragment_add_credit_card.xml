@@ -12,10 +12,11 @@
 
             <RelativeLayout
                 android:id="@+id/formLayout"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:layout_centerHorizontal="true"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="40dp"
+                android:layout_height="match_parent">
                 <TextView
                     android:id="@+id/textViewIniciaSesion"
                     android:layout_width="wrap_content"
@@ -110,6 +111,30 @@
                         android:textSize="20sp" />
 
                     <TextView
+                        android:id="@+id/textViewCVC"
+                        android:layout_marginStart="53dp"
+                        android:layout_toEndOf="@id/textViewExpirationDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:text="@string/CVC" />
+
+                    <EditText
+                        android:id="@+id/editTextCVC"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:layout_below="@id/textViewCVC"
+                        android:layout_toEndOf="@id/textViewExpirationDate"
+                        android:autofillHints="true"
+                        android:ems="10"
+                        android:maxLength="3"
+                        android:hint="@string/CVC"
+                        android:inputType="text"
+                        android:textSize="20sp" />
+
+                    <TextView
                         android:id="@+id/divider"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -168,10 +193,10 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_below="@id/typeLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp">
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginVertical="20dp">
 
                     <Button
                         android:id="@+id/buttonGoBack"
@@ -179,7 +204,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/purple_200"
                         android:text="@string/regresar"
-                        app:cornerRadius="20dp"/>
+                        app:cornerRadius="20dp" />
 
                     <Button
                         android:id="@+id/buttonAdd"

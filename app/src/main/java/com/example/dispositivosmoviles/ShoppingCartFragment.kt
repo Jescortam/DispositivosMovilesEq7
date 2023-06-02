@@ -1,5 +1,6 @@
 package com.example.dispositivosmoviles
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.widget.*
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -20,9 +22,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.google.zxing.integration.android.IntentIntegrator
 import layout.com.example.dispositivosmoviles.ProductAdapter
 import layout.com.example.dispositivosmoviles.Constants
+import kotlin.math.roundToInt
+
+private const val PARSED_PRODUCTS = "parsedProducts"
+private const val PURCHASE_MADE = "purchaseMade"
 
 class ShoppingCartFragment : Fragment() {
     private lateinit var root: ViewGroup
@@ -38,14 +45,34 @@ class ShoppingCartFragment : Fragment() {
     var total: Float = 0.0f
     lateinit var totalCostTextView: TextView
     lateinit var adminNameTextView: TextView
+    private var parsedProducts: String? = null
+    private var purchaseMade: Boolean = false
+    private var products: List<Product>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            parsedProducts = it.getString(PARSED_PRODUCTS).toString()
+            purchaseMade = it.getBoolean(PURCHASE_MADE)
+        }
+
+        val typeToken = object : TypeToken<List<Product>>() {}.type
+        products = Gson().fromJson(parsedProducts, typeToken)
+
+        if (products != null) {
+            for (product in products!!) {
+                Log.d(TAG, "debug $product")
+                total += (product.price * product.quantity).toFloat()
+            }
+        }
+
+        total = ((total * 100).roundToInt() / 100).toFloat()
 
         auth = Firebase.auth
         db = Firebase.firestore
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,9 +80,15 @@ class ShoppingCartFragment : Fragment() {
         root = inflater.inflate(R.layout.fragment_shopping_cart, container, false) as ViewGroup
 
         totalCostTextView = root.findViewById(R.id.totalCostTextView)
+        totalCostTextView.text = "$${total}"
 
         initRecyclerView(root)
-        initScanButton(root)
+
+        val scanButton = root.findViewById<Button>(R.id.scanButton)
+        scanButton.setOnClickListener { initScanner() }
+
+        val weightProducts = root.findViewById<Button>(R.id.weightProducts)
+        weightProducts.setOnClickListener { goToWeightProducts() }
 
         checkoutButton = root.findViewById(R.id.checkoutButton)
         checkoutButton.setOnClickListener { goToCheckout(makeTicket()) }
@@ -64,6 +97,13 @@ class ShoppingCartFragment : Fragment() {
         logoutButton.setOnClickListener { logout() }
 
         adminNameTextView = root.findViewById(R.id.adminNameTextView)
+
+        if (purchaseMade) {
+            MaterialAlertDialogBuilder(requireActivity())
+                .setTitle("Su compra fue exitosa!")
+                .setMessage("Gracias por su compra, tenga un buen día.")
+                .show()
+        }
 
         return root
     }
@@ -109,41 +149,39 @@ class ShoppingCartFragment : Fragment() {
         checkoutButton.isClickable = adminStatus
     }
     private fun updateAdminName() {
-        adminNameTextView.text = if (adminStatus && adminName.isNotEmpty()) "Administrador: ${adminName}" else "Admin desconectado"
+        adminNameTextView.text = if (adminStatus && adminName.isNotEmpty()) "Administrador: $adminName" else "Admin desconectado"
     }
 
     private fun initRecyclerView(root: ViewGroup) {
         val recyclerView = root.findViewById<RecyclerView>(R.id.recyclerView)
-        adapter = ProductAdapter(arrayOf())
+        adapter = ProductAdapter(products ?: listOf())
 
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
     }
 
-    private fun initScanButton(root: ViewGroup) {
-        val scanButton = root.findViewById<Button>(R.id.scanButton)
-        // CAMBIAR ESTO
-        scanButton.setOnClickListener { getProduct("UCJkoyzRpdnKdthEIqcl") }
-    }
-
     private fun initScanner() {
-        val integrator = IntentIntegrator(activity)
+        val integrator = IntentIntegrator.forSupportFragment(this)
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
         integrator.setPrompt("Escanea el código de barras")
         integrator.initiateScan()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-            if (result.contents != null) {
-                getProduct(result.contents)
+        try {
+            val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+            if (result != null) {
+                if (result.contents != null) {
+                    getProduct(result.contents)
+                } else {
+                    Toast.makeText(activity, "Operación cancelada", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(activity, "Operación cancelada", Toast.LENGTH_SHORT).show()
+                super.onActivityResult(requestCode, resultCode, data)
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+        } catch(e: Exception) {
+            Toast.makeText(activity, "Error en el escaneo. Compruebe que sea válido el código", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -166,14 +204,17 @@ class ShoppingCartFragment : Fragment() {
             code,
             data["name"] as String,
             data["image"] as String,
-            data["price"] as Number,
-            quantity = 1
+            null,
+            (data["price"] as Number).toDouble(),
+            quantity = 1.0
         )
     }
 
+    @SuppressLint("SetTextI18n")
     private fun addProductToList(product: Product) {
         total += product.price.toFloat()
-        totalCostTextView.text = "$${total.toString()}"
+        total = ((total * 100).roundToInt() / 100).toFloat()
+        totalCostTextView.text = "$$total"
 
         var index = 0
         for (adapterProduct in adapter.products) {
@@ -198,6 +239,11 @@ class ShoppingCartFragment : Fragment() {
     private fun logout() {
         Firebase.auth.signOut()
         goToLogin()
+    }
+
+    private fun goToWeightProducts() {
+        val action = ShoppingCartFragmentDirections.actionShoppingCartFragmentToWeightProductsFragment(makeTicket())
+        root.findNavController().navigate(action)
     }
 
     private fun goToCheckout(ticket: String?) {

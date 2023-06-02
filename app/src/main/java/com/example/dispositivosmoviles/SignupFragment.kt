@@ -1,6 +1,5 @@
 package com.example.dispositivosmoviles
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import android.widget.Toast
 import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class SignupFragment : Fragment() {
@@ -73,7 +71,7 @@ class SignupFragment : Fragment() {
     }
 
     private fun goToShoppingCart() {
-        val action = SignupFragmentDirections.actionSignupFragmentToShoppingCartFragment()
+        val action = SignupFragmentDirections.actionSignupFragmentToShoppingCartFragment(null, false)
         root.findNavController().navigate(action)
     }
 }

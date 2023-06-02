@@ -34,6 +34,16 @@
         <action
             android:id="@+id/action_shoppingCartFragment_to_checkoutFragment"
             app:destination="@id/checkoutFragment" />
+        <action
+            android:id="@+id/action_shoppingCartFragment_to_weightProductsFragment"
+            app:destination="@id/weightProductsFragment" />
+        <argument
+            android:name="parsedProducts"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="purchaseMade"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
@@ -81,5 +91,34 @@
         <action
             android:id="@+id/action_checkoutFragment_to_shoppingCartFragment"
             app:destination="@id/shoppingCartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/weightProductsFragment"
+        android:name="com.example.dispositivosmoviles.WeightProductsFragment"
+        android:label="fragment_weight_products"
+        tools:layout="@layout/fragment_weight_products" >
+        <action
+            android:id="@+id/action_weightProductsFragment_to_shoppingCartFragment"
+            app:destination="@id/shoppingCartFragment" />
+        <argument
+            android:name="parsedProducts"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_weightProductsFragment_to_bluetoothFragment"
+            app:destination="@id/bluetoothFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bluetoothFragment"
+        android:name="com.example.dispositivosmoviles.BluetoothFragment"
+        android:label="fragment_bluetooth"
+        tools:layout="@layout/fragment_bluetooth" >
+        <action
+            android:id="@+id/action_bluetoothFragment_to_weightProductsFragment"
+            app:destination="@id/weightProductsFragment" />
+        <argument
+            android:name="parsedProducts"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

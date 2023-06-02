@@ -5,20 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
-class CreditCardAdapter(var creditCards: List<CreditCard>): RecyclerView.Adapter<CreditCardAdapter.ViewHolder>() {
+class CreditCardAdapter(var creditCards: List<CreditCard>, var creditCardClickListener: CreditCardClickListener): RecyclerView.Adapter<CreditCardAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var creditCardNumber: TextView
         var creditCardName: TextView
         var creditCardType: TextView
         var creditCardExpirationDate: TextView
+        var creditCardView: CardView
 
         init {
             creditCardNumber = view.findViewById(R.id.creditCardNumberTextView)
             creditCardName = view.findViewById(R.id.creditCardNameTextView)
             creditCardType = view.findViewById(R.id.creditCardTypeTextView)
             creditCardExpirationDate = view.findViewById(R.id.creditCardExpirationDate)
+            creditCardView = view.findViewById(R.id.creditCardView)
         }
     }
 
@@ -35,6 +38,8 @@ class CreditCardAdapter(var creditCards: List<CreditCard>): RecyclerView.Adapter
         viewHolder.creditCardName.text = creditCards[position].name
         viewHolder.creditCardType.text = creditCards[position].type
         viewHolder.creditCardExpirationDate.text = creditCards[position].expirationDate
+
+        viewHolder.creditCardView.setOnClickListener { creditCardClickListener.onCreditCardClick() }
     }
 
     override fun getItemCount() = creditCards.size
